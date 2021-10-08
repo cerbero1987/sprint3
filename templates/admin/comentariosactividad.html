@@ -1,0 +1,113 @@
+{% extends 'admin/baseadmin.html' %}
+
+{% block infouser %}
+<div class="text-center">
+      <img src="{{ url_for('static', filename='img/user.png') }}" alt="Logo ECIJG" class="img-fluid img-thumbnail rounded" />
+      <p class="text-center"><strong><a class="nav-link" href="#">Editar</a></strong></p> 
+</div>
+{% endblock %}
+
+{% block saludouser %}
+<div class="alert alert-success" role="alert">
+      <strong>Usuario Estudiante</strong>
+      <p class="mb-0">Bienvenido, <strong>Nombre de Usuario</strong></p>
+</div>     
+{% endblock %}
+
+{% block menu %}
+<div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            Item #1
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+                  <div class="d-grid gap-2">
+                        <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                        <a class="btn btn-primary" href="#" role="button">Crear</a>
+                        <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                        <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+                  </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+            Item #2
+          </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <div class="d-grid gap-2">
+                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+            Item #3
+          </button>
+        </h2>
+        <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <div class="d-grid gap-2">
+                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+{% endblock %}
+
+{% block areatrabajo %}
+      <h3 class="text-center">Comentarios de Actividad</h3>
+      
+      <div class="container">
+            <div class="row">
+              <div class="col-1">
+                  <img src="{{ url_for('static', filename='img/file.png') }}" alt="file" class="img-fluid rounded" />
+              </div>
+              <div class="col-11 text-xl-start">
+                 <h4>Nombre de la Actividad</h4>
+                 <p>Nombre del curso - Nombre del docente</p>
+                 <p class="text-end"><em>Fecha de entrega</em></p>
+              </div>
+            </div>
+      </div>
+      <hr class="featurette-divider">
+      <div class="container">
+            <div class="row align-items-start">
+              <div class="col-7 border">
+                  Descripción de la actividad
+              </div>
+              <div class="col"></div>
+              <div class="col-4 border">
+                 <h5 class="text-center"><strong>Valoración</strong></h5>
+                 <p>Nombre del curso - Nombre del docente</p>
+                 <p class="text-end"><em>Fecha de entrega</em></p>
+              </div>
+            </div>
+      </div>
+
+      <div class="container">
+            <div class="row align-items-start">
+              <div class="col border">
+                  Documentos adjuntos
+              </div>
+            </div>
+      </div>
+
+      
+{% endblock %}
+

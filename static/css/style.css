@@ -1,0 +1,23 @@
+h1 {
+    font-family: serif;
+    text-align: center;
+    color: #377ba8;
+    background-color: lightblue;                
+}
+
+form {
+    background-color: #ccc;
+    width: 350px;
+    padding: 16px;
+    border-radius: 10px;
+    margin: auto;
+}
+
+input {
+    margin: 3%;
+}
+
+#enviar {
+    text-align: center;
+    font-weight: bold;
+}
