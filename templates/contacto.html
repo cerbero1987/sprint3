@@ -3,7 +3,29 @@
 {% block contenido %}
     <div class="container-fluid">
       <div class="row featurette">
-        <h1 class="text-center">Formulario de Contacto</h1>
+        <h3 class="text-center">Formulario de Contacto</h3>
+        <form action="{{ url_for('contacto') }}" method="post" name="formRegistro" onsubmit="validar_formulario();" >
+            
+          <div class="mb-3">
+              {{ form.nombre.label(class_="form-label")  }} 
+              {{ form.nombre(class="form-control")  }}  
+          </div>
+
+          <div>                    
+              {{ form.correo.label(class_="form-label")   }} 
+              {{ form.correo(class="form-control")   }}  
+          </div>
+
+          <div>                    
+            {{ form.mensaje.label(class_="form-label")   }} 
+            {{ form.mensaje(class="form-control")   }}  
+        </div>
+          <br />        
+          <div>
+              {{ form.enviar(class="btn btn-primary")  }}                        
+          </div>
+      </form>
       </div>
     </div>
+    <br />
 {% endblock %}

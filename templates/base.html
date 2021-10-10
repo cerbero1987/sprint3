@@ -133,10 +133,20 @@
 
             <div class="container marketing">
 
-                <!-- START THE FEATURETTES -->
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  <div class="alert alert-danger" role="alert"> 
+                      <ul class="flashes">
+                        {% for message in messages %}
+                          <li>{{ message }}</li>
+                        {% endfor %}
+                      </ul>
+                  </div>
+                {% endif %}
+              {% endwith %} {{error}}
+              <!-- START THE FEATURETTES -->
                 {% block contenido %}
-        
-                
+ 
                 {% endblock %}  
                 <div class="row featurette">
                     <div class="col-md-5">
