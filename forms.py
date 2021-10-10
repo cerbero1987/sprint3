@@ -1,17 +1,20 @@
-from wtforms import Form, StringField, PasswordField, BooleanField, SubmitField, validators
+from wtforms import Form, StringField, PasswordField, BooleanField, SubmitField, validators, TextAreaField
 
-class Formulario_Usuario(Form):
-    usuario = StringField('Usuario', 
+class Formulario_Contacto(Form):
+    nombre = StringField('Nombre y Apellido', 
     [ 
-        validators.DataRequired(), 
+        validators.DataRequired('Campo Requerido para contacto'), 
         validators.Length(min=8,max=25)
     ] )
-    password = PasswordField('Contraseña',
+    correo = StringField('E-mail',
     [ 
-        validators.DataRequired(), 
+        validators.DataRequired('Campo Requerido para contacto'), 
         validators.Length(min=8,max=25) 
     ])
-    recordar = BooleanField('Recordar usuario')
-    enviar = SubmitField('Iniciar sesión')
+    mensaje = TextAreaField('Mensaje',
+    [
+        validators.DataRequired('Campo Requerido para contacto')
+    ])
+    enviar = SubmitField('Enviar')
     
 
