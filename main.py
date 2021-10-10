@@ -8,12 +8,12 @@ import yagmail as yagmail
 from forms import Formulario_Usuario
 
 app = Flask(__name__)
-app.secret_key = "Yefferson"
+app.secret_key = "Equipo8"
 
 @app.route('/')
 @app.route('/index')
 def index():    
-    return render_template("registro.html")
+    return render_template("index.html", titulo='Escuela Colombiana de Ingeniería Julio Garavito')
 
 @app.route('/contacto')
 def contacto():    

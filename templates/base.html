@@ -16,7 +16,7 @@
         <script src="{{ url_for('static', filename='js/bootstrap.js') }}"> </script>
         
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" type="text/css" >
-    
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/carousel.css') }}" type="text/css" >
         <style>
             .bd-placeholder-img {
               font-size: 1.125rem;
@@ -31,11 +31,28 @@
                 font-size: 3.5rem;
               }
             }
+
+            .carousel-item > img {height: 25rem; }
+            .carousel-item {height: 25rem; }
+            .carousel-caption{background:rgba(0,0,0,0.4)}
+            .flex-caption {
+              width: 100%;
+              padding: 1%;
+              position: absolute;
+              left: 0;
+              bottom: 0;
+              background: rgba(0,0,0,0.4);
+              text-align: justify;
+              font-size: 14px;
+              line-height: 115%;
+              color: white;
+            }
           </style>
-          <link rel="stylesheet" href="{{ url_for('static', filename='css/carousel.css') }}" type="text/css" >
+          
     </head>
 
     <body>
+        <a name="inicio"></a>
         <header>
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
               <div class="container-fluid">
@@ -69,35 +86,34 @@
                 </div>
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                    <img src="../static/img/noticias/nota1.png" class="d-block w-100" alt="nota1" />
             
                     <div class="container">
-                      <div class="carousel-caption text-start">
-                        <h1>Example headline.</h1>
-                        <p>Some representative placeholder content for the first slide of the carousel.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+                      <div class="flex-caption text-start">
+                        <h3>Ecoamigable, la palabra que describe a la Escuela</h3>
+                        <p>Sus construcciones guardan con mayor calidad la relación de la edificación con el entorno y el desarrollo urbano. Por otro lado, el campus es un ejemplo del uso eficiente y racional de la energía, el ahorro y utilización del agua. </p>
                       </div>
                     </div>
                   </div>
                   <div class="carousel-item">
-                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                    <img src="../static/img/noticias/nota2.jpg" class="d-block w-100" alt="nota2" />
+
             
                     <div class="container">
-                      <div class="carousel-caption">
-                        <h1>Another example headline.</h1>
-                        <p>Some representative placeholder content for the second slide of the carousel.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+                      <div class="flex-caption">
+                        <h3>La Escuela es una institución de educación superior de carácter tecnológico.</h3>
+                        <p>Cultura académica enmarcada en la excelencia, la creatividad y la innovación. </p>
                       </div>
                     </div>
                   </div>
                   <div class="carousel-item">
-                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                    <img src="../static/img/noticias/nota3.jpg" class="d-block w-100" alt="nota3" />
+
             
                     <div class="container">
-                      <div class="carousel-caption text-end">
-                        <h1>One more for good measure.</h1>
-                        <p>Some representative placeholder content for the third slide of this carousel.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+                      <div class="flex-caption">
+                        <h4>20 de octubre de 1972 nace un ambicioso proyecto educativo, formar ingenieros de excelencia.</h4>
+                        <p>Primero, nació el Programa de Ingeniería Civil, luego se fueron sumando los programas de Ingeniería Eléctrica e Ingeniería en Sistemas; posteriormente, una vez que la Escuela ocupó un merecido puesto de honor entre las instituciones de educación superior del país, se incluyeron los programas de Ingeniería Industrial, Ingeniería Electrónica y Economía.</p>
                       </div>
                     </div>
                   </div>
@@ -123,24 +139,40 @@
                 
                 {% endblock %}  
                 <div class="row featurette">
-                    <div class="col-md-7">
-                        <h2 class="featurette-heading">Fi33rst featurette heading. <span class="text-muted">It’ll blow your mind.</span></h2>
-                        <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.</p>
-                    </div>
                     <div class="col-md-5">
-                        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
-
+                      <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" width="100%" height="400" src="https://www.youtube.com/embed/k6w5d-pmMjw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-7">
+                      <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel" style="margin-bottom: 1rem;">
+                        <div class="carousel-inner">
+                          <div class="carousel-item active">
+                            <img src="../static/img/Campus/campus1.jpg" class="d-block w-100" alt="Campus 1" />
+                          </div>
+                          <div class="carousel-item">
+                            <img src="../static/img/Campus/campus2.png" class="d-block w-100" alt="Campus 2" />
+                          </div>
+                          <div class="carousel-item">
+                            <img src="../static/img/Campus/campus3.jpg" class="d-block w-100" alt="Campus 3" />
+                          </div>
+                          <div class="carousel-item">
+                            <img src="../static/img/Campus/campus4.jpg" class="d-block w-100" alt="Campus 4" />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                 </div>
-                <hr class="featurette-divider">
-
+             
                 <!-- /END THE FEATURETTES -->
-
             </div><!-- /.container -->
+            <hr /> 
+
             <!-- FOOTER -->
             <footer class="container">
-                <p class="float-end"><a href="#">Back to top</a></p>
-                <p>&copy; 2017–2021 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+                <p class="float-end"><a href="#inicio">Back to top</a></p>
+                <p>&copy; 2017–2021 Company, Inc. &middot; Escuela Colombiana de Ingeniería Julio Garavito. Personería Jurídica 086 de enero 19 de 1973. Renovación de Acreditación Institucional de Alta Calidad. Resolución 002710 del 18 de marzo de 2019 (vigencia de 6 años). Vigilada por Mineducación.</p>
             </footer>
         </main>        
     </body>
