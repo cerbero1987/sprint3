@@ -1,4 +1,5 @@
 from flask import Flask, flash, redirect, render_template, request, url_for
+from werkzeug.utils import html #agregada por franklin
 from utils import isUsernameValid, isEmailValid, isPasswordValid, isNameValid
 import yagmail as yagmail
 from forms import Formulario_Contacto
@@ -47,15 +48,6 @@ def contacto():
     except:
         flash("¡Ups! Ha ocurrido un error, intentelo de nuevo.")
         return render_template("contacto.html", titulo="Formulario de contacto")
-
-
-
-    #form = Formulario_Contacto(  request.form  )
-    #if request.method == 'POST' and form.validate():            
-        #flash('Inicio de sesión solicitado por el usuario {}, recordar={}'.format(form.usuario.data, form.recordar.data))
-        #return redirect(url_for('gracias'))
-
-    #return render_template("contacto.html", form=form, titulo="Formulario de contacto")
 
 
 @app.route('/ingresar')
@@ -116,3 +108,18 @@ def registro():
 @app.route('/gracias', methods=['GET', 'POST'])
 def gracias():
     return render_template("gracias.html", titulo='Gracias')
+
+#franklin
+@app.route('/infodocente', methods=['GET', 'POST'])
+def informacionDocente():
+    return render_template("admin/infodocente.html", titulo="Información de Docente")
+
+#Notas Estudiante
+@app.route('/notaestudiante', methods=['GET', 'POST'])
+def notasEstudiante():
+    return render_template("admin/notasestudiante.html", titulo="Calificaciones de Estudiante")
+
+#Notas docente
+@app.route('/notadocente', methods=['GET', 'POST'])
+def notadocente():
+    return render_template("admin/notasdocente.html", titulo="Calificaciones de Estudiante")
