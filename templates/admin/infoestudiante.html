@@ -1,0 +1,216 @@
+{% extends 'admin/baseadmin.html' %}
+<!-- aun no sé como se ve-->
+{% block infouser %}
+<div class="text-center">
+      <img src="{{ url_for('static', filename='img/user.png') }}" alt="Logo ECIJG" class="img-fluid img-thumbnail rounded" />
+      <p class="text-center"><strong><a class="nav-link" href="#">Editar</a></strong></p> 
+</div>
+{% endblock %}
+
+{% block saludouser %}
+<div class="alert alert-success" role="alert">
+      <strong>Usuario Docente</strong>
+      <p class="mb-0">Bienvenido, <strong>Nombre de Usuario</strong></p>
+</div>     
+{% endblock %}
+
+{% block menu %}
+<div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            Inicio
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+                  <div class="d-grid gap-2">
+                        <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                        <a class="btn btn-primary" href="#" role="button">Crear</a>
+                        <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                        <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+                  </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+            Perfil
+          </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <div class="d-grid gap-2">
+                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+            Asignatura
+          </button>
+        </h2>
+        <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <div class="d-grid gap-2">
+                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingFour">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+            Cursos
+          </button>
+        </h2>
+        <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <div class="d-grid gap-2">
+                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingFive">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+            Calificaciones
+          </button>
+        </h2>
+        <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <div class="d-grid gap-2">
+                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingSix">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+            Mensajes
+          </button>
+        </h2>
+        <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">
+            <div class="d-grid gap-2">
+                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingSeven">
+          <button class="accordion-button collapsed" type="button" >
+            Cerrar Sesion
+          </button>
+        </h2>
+      </div>
+    </div>  
+{% endblock %}
+
+{% block areatrabajo %}
+<h3 class="text-center"> Información del Estudiante </h3>
+<br/>
+<div class="container">
+  <div class="row">
+    <div class="col-1">
+      <img src="{{ url_for('static', filename='img/file.png') }}" alt="file" class="img-fluid rounded" />
+    </div>
+
+    <div class="col-2 text-xl-start">
+      <h4>Informacion básica</h4>
+    </div>
+
+    <div class="col-8 ">
+      <h5 align="right" ><strong>Editar</strong></h5>                
+      <img align="right" src="{{ url_for('static', filename='img/editar.png') }}" alt="editar" class="img-fluid rounded" href="" alt="" width="30" height="30"/>
+    </div>
+  </div>
+  <hr class="featurette-divider">
+  <div class="container-fluid">
+    <div class="row featurette">
+      <h3 class="text-center">Formulario de Contacto</h3>
+      <form action="{{ url_for('infoestudiante') }}" method="post" name="formRegistroEstudiante" onsubmit="validar_formulario();" >
+          
+        <div class="mb-3">
+            {{ form.nombre.label(class_="form-label")  }} 
+            {{ form.nombre(class="form-control", placeholder="-----")  }}  
+        </div>
+
+        <div class="mb-3">                   
+            {{ form.cedula.label(class_="form-label")   }} 
+            {{ form.cedula(class="form-control", placeholder="-----")   }}  
+        </div>
+
+        <div class="mb-3">                   
+          {{ form.telefono.label(class_="form-label")   }} 
+          {{ form.telefono(class="form-control", placeholder="-----")   }}  
+        </div>
+
+        <div class="mb-3">                   
+          {{ form.fechaNac.label(class_="form-label")   }} 
+          {{ form.fechaNac(class="form-control", placeholder="-----")   }}  
+        </div>
+
+        <div class="mb-3">                   
+          {{ form.correo.label(class_="form-label")   }} 
+          {{ form.correo(class="form-control", placeholder="-----")   }}  
+        </div>
+
+        <div class="mb-3">                   
+          {{ form.codigo.label(class_="form-label")   }} 
+          {{ form.codigo(class="form-control", placeholder="-----")   }}  
+        </div>
+
+        <div class="row">
+          <div class="col-1">
+              <img src="{{ url_for('static', filename='img/file.png') }}" alt="file" class="img-fluid rounded" />
+          </div>
+
+          <div class="col-2 text-xl-start">
+             <h4>Información Académica</h4>
+          </div>
+
+          <div class="col-8 ">
+            <h5 align="right" ><strong>Editar</strong></h5>                
+            <img align="right" src="{{ url_for('static', filename='img/editar.png') }}" alt="editar" class="img-fluid rounded" href="" alt="" width="30" height="30"/>
+          </div>
+        </div>
+        <br />
+        <hr class="featurette-divider">
+        <div class="mb-3">                   
+          {{ form.facultad.label(class_="form-label")   }} 
+          {{ form.facultad(class="form-control", placeholder="-----")   }}  
+        </div>
+        <div class="mb-3">                   
+          {{ form.carrera.label(class_="form-label")   }} 
+          {{ form.carrera(class="form-control", placeholder="-----")   }}  
+        </div>
+    </form>
+    </div>
+  </div>
+  <br />
+</div>
+      
+{% endblock %}
+
