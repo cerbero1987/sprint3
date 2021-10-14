@@ -1,14 +1,28 @@
-{% extends 'admin/baseadmin.html' %}
+{% extends 'base.html' %}
 
-{% block infouser %}
-      
-{% endblock %}
-
-{% block menu %}
-      
-{% endblock %}
-
-{% block areatrabajo %}
-      <h4 class="text-center">Iniciar Sesión</h4>
-      login
+{% block contenido %}
+<div class="container-fluid">
+  <div class="row featurette">
+    <h3 class="text-center">Iniciar Sesión</h3>
+    <form action="{{ url_for('ingresar') }}" method="post" name="formIngreso" onsubmit="validar_formulario();" >
+      <div class="mb-3">
+        {{ form.usuario.label(class_="form-label")  }} 
+        {{ form.usuario(class="form-control")  }}
+      </div>
+      <div>
+        {{ form.contrasena.label(class_="form-label")   }} 
+        {{ form.contrasena(class="form-control")   }}
+      </div><br /> 
+      <div class="form-check">
+        {{ form.recordar.label(class_="form-check-label")   }} 
+        {{ form.recordar(class_="form-check-input")   }} 
+      </div>
+      <div>
+        {{ form.login(class="btn btn-primary")  }}                        
+      </div>
+    </form>
+    <center><a href="/ingresar">¿Olvidaste la contraseña?</a></center>
+  </div>
+</div>
+<br />
 {% endblock %}
