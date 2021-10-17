@@ -53,7 +53,12 @@
             <div class="container-fluid">
                 <div class="row">
                   <div class="col">{% block infouser %}{% endblock %}</div>
-                  <div class="col-6">{% block saludouser %}{% endblock %}</div>
+                  <div class="col-6">
+                    <div class="alert alert-success" role="alert">
+                      <strong>Usuario {{session['nombre_rol']}}</strong>
+                      <p class="mb-0">Bienvenido, <strong>{{session['nombre_logueado']}} {{session['apellido_logueado']}}</strong></p>
+                    </div>  
+                  </div>
                   <div class="col">
                     <div class="text-center">
                       <img src="{{ url_for('static', filename='img/logo-ecijg.png') }}" alt="Logo ECIJG" class="img-fluid rounded" />
@@ -61,9 +66,110 @@
                 </div>
                 <div class="row">
                   <div class="col-2">
-                    {% block menu %}{% endblock %}
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                      <!-- Items para Administrar Usuarios del Sistema-->
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            {% if session['rol_logueado'] == 1 %}Usuarios
+                            {% else %} Perfil
+                            {%endif%}
+                          </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                          <div class="accordion-body">
+                                  <div class="d-grid gap-2">
+                                        {% if session['rol_logueado'] == 1 %} 
+                                        <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                                        <a class="btn btn-primary" href="/registrodeusurioEstudiante" role="button">Crear</a>{%endif%}
+                                        <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                                        {% if session['rol_logueado'] == 1 %}<a class="btn btn-primary" href="#" role="button">Eliminar</a>{%endif%}
+                                  </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Items para Administrar Cursos en el sistema-->
+                      {% if session['rol_logueado'] == 1 %} <!-- Solo lo ve el administrador-->
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingTwo">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                            Cursos
+                          </button>
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                          <div class="accordion-body">
+                            <div class="d-grid gap-2">
+                                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {%endif%}
+                      
+                      <!-- Items para Administrar Calificaciones en el sistema-->
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingFive">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+                            Calificaciones
+                          </button>
+                        </h2>
+                        <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                          <div class="accordion-body">
+                            <div class="d-grid gap-2">
+                                  {% if session['rol_logueado'] == 2 or  session['rol_logueado'] == 3 %}
+                                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                                  {%endif%}
+                                  {% if session['rol_logueado'] == 2 %}
+                                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                                  {%endif%}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Items para Administrar Calificaciones en el sistema-->
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingSix">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                            Mensajes
+                          </button>
+                        </h2>
+                        <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                          <div class="accordion-body">
+                            <div class="d-grid gap-2">
+                                  <a class="btn btn-primary" href="#" role="button">Consultar</a>
+                                  <a class="btn btn-primary" href="#" role="button">Crear</a>
+                                  <a class="btn btn-primary" href="#" role="button">Modificar</a>
+                                  <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingSeven">
+                          <button class="accordion-button collapsed" type="button" >
+                            Cerrar Sesion
+                          </button>
+                        </h2>
+                      </div>
+                    </div>  
                   </div>
                   <div class="col-10">
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                      <div class="alert alert-danger" role="alert"> 
+                          <ul class="flashes">
+                            {% for message in messages %}
+                              <li>{{ message }}</li>
+                            {% endfor %}
+                          </ul>
+                      </div>
+                    {% endif %}
+                    {% endwith %} {{error}}
+
                     {% block areatrabajo %}{% endblock %}
                   </div>
                 </div>

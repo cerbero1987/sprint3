@@ -56,7 +56,7 @@ class Formulario_Ingresar(Form):
     usuario = StringField('Usuario', 
     [ 
         validators.DataRequired('Campo Requerido para ingresar'), 
-        validators.Length(min=8,max=25)
+        validators.Length(min=8,max=10)
     ] )
     contrasena = PasswordField('Contraseña',
     [ 

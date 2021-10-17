@@ -4,6 +4,9 @@ from validate_email import validate_email
 pass_reguex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$"
 user_reguex = "^[a-zA-Z0-9_.-]+$"
 name_user = "^[a-zA-Z ]+$"
+#PAra Pruebas
+name_userfacil = "^[a-zA-Z ]+$"
+pass_userfacil = "^[a-zA-Z0-9 ]+$"
 F_ACTIVE = 'ACTIVE'
 F_INACTIVE = 'INACTIVE'
 EMAIL_APP = 'EMAIL_APP'
@@ -37,6 +40,20 @@ def isUsernameValid(user):
 def isPasswordValid(password):
     #error = 'La contraseña debe contener al menos una minúscula, una mayúscula, un número y 8 caracteres'
     if re.search(pass_reguex, password):
+        return True
+    else:
+        return False
+
+def isUsernameValidFacil(user):
+    #error = 'La contraseña debe contener al menos una minúscula, una mayúscula, un número y 8 caracteres'
+    if re.search(name_userfacil, user):
+        return True
+    else:
+        return False
+
+def isPasswordValidFacil(password):
+    #error = 'La contraseña debe contener al menos una minúscula, una mayúscula, un número y 8 caracteres'
+    if re.search(pass_userfacil, password):
         return True
     else:
         return False

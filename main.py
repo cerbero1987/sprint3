@@ -1,12 +1,22 @@
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, sessions, url_for, g, session
 from werkzeug.utils import html #agregada por franklin
-from utils import isUsernameValid, isEmailValid, isPasswordValid, isNameValid
+from utils import isUsernameValid, isEmailValid, isPasswordValid, isNameValid, isUsernameValidFacil, isPasswordValidFacil
 import yagmail as yagmail
 from forms import Formulario_Contacto, info_Docente, Formulario_Ingresar, info_Estudiante, crear_Actividad,registrar_Estudiante, registrar_Docente
+from db import get_db, close_db
+import functools
 
 
 app = Flask(__name__)
 app.secret_key = '_5#y2L"F4Q8z\n\xec]/'
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('ingresar'))
+        return view(**kwargs)
+    return wrapped_view
 
 @app.route('/')
 @app.route('/index')
@@ -107,31 +117,61 @@ def notasdocente():
 #Formulario de Ingreso
 @app.route('/ingresar', methods=['GET', 'POST'])
 def ingresar():
-    try:
-        form = Formulario_Ingresar(  request.form  )
-        error = None
+    #try:
+        form = Formulario_Ingresar(request.form)    
         if request.method == 'POST': #and form.validate():  
-            usuario = request.form['Usuario']
+            usuario = request.form['usuario']
             contrasena = request.form['contrasena'] 
+            error = None
+
            #1. Validar datos de ingreso:
-            if not isNameValid(usuario):
+            if not isUsernameValidFacil(usuario):
                 # Si está mal.
                 error = "Solo debe usar letras en Usuario"
                 flash(error)
-            if not isEmailValid(contrasena):
+            if not isPasswordValidFacil(contrasena):
                 # Si está mal.
                 error = "contraseña invalida"
                 flash(error)
             if error is not None:
                 # Ocurrió un error
+                form = Formulario_Ingresar( )
                 return render_template("ingresar.html", form=form, titulo="Iniciar Sesión")
             else:
-                return render_template("baseadmin.html", titulo='Gracias por escribirnos')
+                db = get_db()
+                user =  db.execute('SELECT * FROM usuario WHERE user_usuario = ? AND password_usuario = ?',(usuario, contrasena)).fetchone()
+                
+                if user is None:
+                    error = "Usuario no Existe en la Base de Datos"
+                    flash(error)
+                    form = Formulario_Ingresar( )
+                    return render_template("ingresar.html", form=form, titulo="Iniciar Sesión")
+                else:
+                    rol =  db.execute('SELECT * FROM rol WHERE id_rol = ?',(user[1],)).fetchone()
+                    
+                    session['user_logueado'] = user[0]
+                    session['rol_logueado'] = user[1]
+                    session['nombre_logueado'] = user[4]
+                    session['apellido_logueado'] = user[5]
+                    session['nombre_rol'] = rol[1]
+                    if user[1] == 1:
+                        return render_template("admin/paneladmin.html", titulo='Panel de Administración')
+                    if user[1] == 2:
+                        return render_template("admin/paneladmin.html", titulo='Panel de Docente')
+                    if user[1] == 3:
+                        return render_template("admin/paneladmin.html", titulo='Panel de Alumno')
+                    else:
+                        return render_template("admin/paneladmin.html", titulo='Panel de Error')
 
-        return render_template("ingresar.html", form=form, titulo="Iniciar Sesión")
-    except:
-        flash("¡Ups! Ha ocurrido un error, intentelo de nuevo.")
-        return render_template("ingresar.html", form=form, titulo="Iniciar Sesión")
+
+        else:
+            #flash("No entro if POST")
+            form = Formulario_Ingresar( )
+            return render_template("ingresar.html", form=form, titulo="Iniciar Sesión")
+    #except:
+     #   flash("¡Ups! Ha ocurrido un error, intentelo de nuevo.")
+      #  form = Formulario_Ingresar( )
+       # return render_template("ingresar.html", form=form, titulo="Iniciar Sesión")
 
 #Decorador buscador de cursos
 @app.route('/busquedacursos', methods=['GET', 'POST'])
