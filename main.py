@@ -50,7 +50,7 @@ def contacto():
                 #2. Enviar un correo.
                 # Para crear correo:                                    
                 # Modificar la siguiente linea con tu informacion personal            
-                yag = yagmail.SMTP('yeffersone@uninorte.edu.co','39VMbtj_2EZ6jZ-')
+                yag = yagmail.SMTP('yeffersone@uninorte.edu.co','NN')
                 yag.send(to='yeffersone@uninorte.edu.co', subject='contacto web, '+nombre, contents=mensaje, headers={"Reply-To":f"{correo}"})
                 return render_template("gracias.html", titulo='Gracias por escribirnos')
 
