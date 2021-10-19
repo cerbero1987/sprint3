@@ -64,29 +64,12 @@ def contacto():
 @app.route('/consultaractividades', methods=['GET', 'POST'])#lista las actividades 
 def consultaractividades():
     db = get_db()
-    actividades =  db.execute('SELECT * FROM actividades').fetchall()
+    actividades =  db.execute('SELECT * FROM actividades INNER JOIN tipo_actividad ON actividades.id_tipo_actividad = tipo_actividad.id_tipo_actividad').fetchall()
     if actividades is None:
         error = "No se han creado actividades"
         flash(error)
         return render_template("admin/actividades/consultaractividades.html", titulo="Listado de Actividades")
     else:
-        #tipo_actividad = actividades[2]
-        #
-        #for i in range(len(actividades)):
-        #    for j in range(len(actividades[i])):
-        #        print(actividades[i][j], end=' ')
-        #    print()
-        
-        for i in range(len(actividades)):
-            rol =  db.execute('SELECT nombre_tipo_actividad FROM tipo_actividad WHERE id_tipo_actividad = ?',(actividades[i][2],)).fetchone()
-            
-            cadena = " ".join(rol)
-            #actividades[i][2] = cadena
-
-      
-        print(cadena)
-
-
         for i in range(len(actividades)):
             for j in range(len(actividades[i])):
                 print(actividades[i][j], end=' ')

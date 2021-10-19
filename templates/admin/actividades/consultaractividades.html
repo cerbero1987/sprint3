@@ -28,11 +28,11 @@
               </tr>
             </thead>
             <tbody>
-            {%for id, desc, id_tipo, fecha, adj, id_asig, calif in session['actividades']%}
+            {%for id, desc, id_tipo, fecha, adj, id_asig, calif, id_tipo_act, nombre_act in session['actividades']%}
               <tr>
                 <th scope="row">{{id}}</th>
                 <td>{{desc}}</td>
-                <td>{{id_tipo}}</td>
+                <td>{{nombre_act}}</td>
                 <td>{{fecha}}</td>
                 <td>{{adj}}</td>
                 <td>{{id_asig}}</td>
