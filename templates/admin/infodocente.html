@@ -1,5 +1,4 @@
 {% extends 'admin/baseadmin.html' %}
-<!-- aun no sé como se ve-->
 {% block infouser %}
 <div class="text-center">
       <img src="{{ url_for('static', filename='img/user.png') }}" alt="Logo ECIJG" class="img-fluid img-thumbnail rounded" />
@@ -9,70 +8,103 @@
 
 
 {% block areatrabajo %}
-      <h3 class="text-center">Docente Nombre del Docente</h3>
-      
-      <div class="container">
-            <div class="row">
-              <div class="col-1">
-                  <img src="{{ url_for('static', filename='img/editar.png') }}" alt="file" class="img-fluid rounded" />
-              </div>
-              <div class="col-11 text-xl-start">
-                 <h4>Informacion básica</h4>
-              </div>
-            </div>
-      </div>
-      <hr class="featurette-divider">
-      <div class="container">
-       
-        <form action="{{ url_for('infodocente') }}" method="post" name="formInfoDocente" onsubmit="validar_formulario();" >
-          <div class="mb-3">
-              {{ form.nombre.label(class_="form-label")  }} 
-              {{ form.nombre(class="form-control", id="nombre", placeholder="Lars Johan Yngve Lannerback")  }}  
+<div class="container">
+    <br>
+    
+    <div class="row">
+          <div class="col-1">
+              <img src="{{ url_for('static', filename='img/file.png') }}" alt="file" class="img-fluid rounded" />
           </div>
-
+          <div class="col-4 text-xl-start">
+             <h4>Información Básica</h4>
+          </div>
+          <div class="col-7 text-xl-start">
+            <h5 align="right" ><strong>Editar</strong></h5> 
+            <img align="right" src="{{ url_for('static', filename='img/editar.png') }}" alt="editar" class="img-fluid rounded" href="" alt="" width="30" height="30"/>
+          </div>     
+    </div>
+        
+    <hr class="featurette-divider">
+    <br> 
+    <form action="{{ url_for('infodocente') }}" method="post" name="formInfoDocente"  >
+          <div class="mb-3"> 
+              {{ form.nombre.label(class_="form-label")  }}  
+              {{ form.nombre(class="form-control", id="nombre", value=session['datos_form'][4] ,placeholder="Nombre" )  }}  
+          </div>
+          <div class="mb-3">
+              {{ form.apellido.label(class_="form-label")  }}
+              {{ form.apellido(class="form-control", id="apellido", value=session['datos_form'][5] ,placeholder="Apellido")   }}  
+          </div>
           <div class="mb-3">                    
               {{ form.cedula.label(class_="form-label")   }} 
-              {{ form.cedula(class="form-control", id="cedula", placeholder="3005253636")   }}  
+              {{ form.cedula(class="form-control", id="cedula", value=session['datos_form'][7] ,placeholder="cedula")   }}  
           </div>
           <div class="mb-3">                    
             {{ form.correo.label(class_="form-label")   }} 
-            {{ form.correo(class="form-control", id="correo", placeholder="docente@gmail.com")   }}  
+            {{ form.correo(class="form-control", id="correo", value=session['datos_form'][6],placeholder="correopersonal@gmail.com" )   }}  
+          </div> 
+          <div class="mb-3">                    
+            {{ form.codigo_usuario.label(class_="form-label")   }} 
+            {{ form.codigo_usuario(class="form-control", id="codigo", value=session['datos_form'][8] , disabled="true")   }}  
+          </div> 
+          <br>
+          <br>
+          <div class="row">
+              <div class="col-1">
+                  <img src="{{ url_for('static', filename='img/file.png') }}" alt="file" class="img-fluid rounded" />
+              </div>
+              <div class="col-4 text-xl-start">
+                <h4>Información Académica</h4>
+              </div>
+              <div class="col-7 text-xl-start">
+                <h5 align="right" ><strong>Editar</strong></h5> 
+                <img align="right" src="{{ url_for('static', filename='img/editar.png') }}" alt="editar" class="img-fluid rounded" href="" alt="" width="30" height="30"/>
+              </div>     
           </div>
-               
-      </div>
+    
+        
+    <hr class="featurette-divider">
 
-      <div class="container">
-        <div class="row">
-          <div class="col-11 text-xl-start">
-             <h3 class="text-center">Informacion Académica</h3>
-          </div>
-        </div>
-      </div>
-        <div class="container">
+          <br>
           <div class="mb-3">                    
             {{ form.pregrado.label(class_="form-label")   }} 
-            {{ form.pregrado(class="form-control", id="pregrado", placeholder="Ingenieria Mecatrónica")   }}  
+            {{ form.pregrado(class="form-control", id="pregrado", value=session['datos_form'][9] ,placeholder="ej: Ingenieria Informatica")   }}  
           </div>
           <div class="mb-3">                    
             {{ form.postgrado.label(class_="form-label")   }} 
-            {{ form.postgrado(class="form-control", id="postgrado", placeholder="Maestria en Soldadura de Nanocomponentes")   }}  
+            {{ form.postgrado(class="form-control", id="postgrado", value=session['datos_form'][10], placeholder="ej: Phd en filosofia griega")   }}  
           </div>
-        </div>
-        <div class="container">
+          
+          <br>
+          <div class="row">  
+              <div class="d-grid gap-2 col-6 mx-auto">
+                 {{ form.guardar(class="btn btn-primary") }}
+              </div>
+          </div>
+
+    </form>
+</div>
+   
+<br><br>
+{% endblock %}
+        <!-- <div class="container">   # en elaboracion.
           <div class="row">
             <div class="col-11 text-xl-start">
                <h3 class="text-center">Asignaturas a Cargo</h3>
             </div>
           </div>
-          {{ form.language.label(class_="form-label")   }} 
-            {{ form.language(class="form-control", id="Asignaturas")   }}
-        </div>
-         <br />
-         <div class="container">
-            <div class="row">
-            {{ form.guardar(class="btn btn-primary")  }} 
-            </div>                       
-        </div><br />
-      </form>
-{% endblock %}
+          {{ form.asignatura.label(class_="form-label")   }} 
+            {{ form.asignatura(class="form-control", id="Asignaturas")   }}
+            <table class="table-secondary">
+              <tbody>
+                {%- for column in columns %}
+                    <tr scope="row">{{ row|attr(column) }}</tr>
+                {%- endfor %}
+              </tbody>
+            </table> 
+        
+        
+          </div>-->
+
+   
 
