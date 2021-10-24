@@ -16,14 +16,14 @@
                
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" type="text/css" >
     
-        
+     
     </head>
 
     <body>
         <header>
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
               <div class="container-fluid">
-                <a class="navbar-brand" href="index">SGN</a>
+                <a class="navbar-brand" href="/index">SGN</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
@@ -72,7 +72,7 @@
                       <!-- home inicio-->
                         <div class="accordion-item">
                             <h2 class="accordion" id="flush-headingSeven">
-                                  <a href="home">  <button class="accordion-button collapsed" type="button"> Inicio </button></a>
+                                  <a href="/home">  <button class="accordion-button collapsed" type="button"> Inicio </button></a>
                             </h2>
                         </div>                  
                         <!-- perfil o usuario-->
@@ -88,8 +88,8 @@
                               <div class="accordion-body">
                                 <div class="d-grid gap-2">
                                       <a class="btn btn-primary" href="/registrodeusurioEstudiante" role="button">Ver o crear usuarios</a> 
-                                      <a class="btn btn-primary" href="#" role="button">Modificar usuarios</a>
-                                      <a class="btn btn-primary" href="#" role="button">Eliminar usuarios</a>  
+                                      <a class="btn btn-primary" href="/#" role="button">Modificar usuarios</a>
+                                      <a class="btn btn-primary" href="/#" role="button">Eliminar usuarios</a>  
                                 </div>
                               </div>
                            </div>
@@ -108,17 +108,17 @@
                        
                           <h2 class="accordion-header" id="flush-headingTwo">
                               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                              <a href="">Cursos</a> <!--link a panel de administracion de cursos user admin-->
+                              <a href="/#">Cursos</a> <!--link a panel de administracion de cursos user admin-->
                               </button>
                               
                           </h2>
                                 <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                                     <div class="accordion-body">
                                       <div class="d-grid gap-2">
-                                            <a class="btn btn-primary" href="#" role="button">Consultar</a>
-                                            <a class="btn btn-primary" href="#" role="button">Crear</a>
-                                            <a class="btn btn-primary" href="#" role="button">Modificar</a>
-                                            <a class="btn btn-primary" href="#" role="button">Eliminar</a>
+                                            <a class="btn btn-primary" href="/#" role="button">Consultar</a>
+                                            <a class="btn btn-primary" href="/#" role="button">Crear</a>
+                                            <a class="btn btn-primary" href="/#" role="button">Modificar</a>
+                                            <a class="btn btn-primary" href="/#" role="button">Eliminar</a>
                                       </div>
                                     </div>
                                 </div>
@@ -126,7 +126,7 @@
                       {%else%}
                       <div class="accordion-item">
                           <h2 class="accordion" id="flush-headingSeven">
-                              <a href="{{session['buscacursos']}}">  <button class="accordion-button collapsed" type="button"> Cursos </button></a>
+                              <a href="/{{session['buscacursos']}}">  <button class="accordion-button collapsed" type="button"> Cursos </button></a>
                           </h2>
                       </div>  
                       {%endif%}
@@ -181,6 +181,7 @@
                            </div>
                       </div>
                       <!--calificaciones -->
+                      <!--Menu calificaciones docente y admin -->
                       {% if session['rol_logueado'] == 2 or session['rol_logueado'] == 1 %}
                       <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-Calificacion">
@@ -192,20 +193,21 @@
                           <div class="accordion-body">
                             <div class="d-grid gap-2">
                                    
-                                  <a class="btn btn-primary" href="{{url_for(session['calificacionespublicadas'])}}" role="button">Calificaciones publicadas</a>
+                                  <a class="btn btn-primary" href="{{url_for(session['calificacionespublicadas'])}}" role="button">Consultar Calificaciones</a>
+                                  {% if session['rol_logueado'] == 2 %}
                                   <a class="btn btn-primary" href="{{url_for(session['notas'])}}" role="button">Consultar y calificar actividades</a>
-                                  {% if session['rol_logueado'] == 1 %}
                                   <a class="btn btn-primary" href="#" role="button">Modificar o eliminar calificaciones</a> <!--aun cuando se acabe el tiempo de subir notas o el curso este cerrado-->
                                   {%endif%}
                             </div>
                           </div>
                         </div>
                       </div>
-                      {%else%}    
+                      {%else%}  
+                      <!--Menu calificaciones Alumno -->  
                       <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-Calificacion">
-                          <a href="{{url_for(session['notas'])}}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseCalificacion" aria-expanded="false" aria-controls="flush-collapseCalificacion">
+                          <a href="/calificacionalumno">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseCalificacion" aria-expanded="false" aria-controls="flush-collapseCalificacion" id="unico" >
                              Calificaciones
                           </button></a>
                         </h2>
@@ -216,7 +218,7 @@
                       
                       <div class="accordion-item">
                           <h2 class="accordion-header" id="flush-headingcerrar">
-                            <a href="logout">
+                            <a href="/logout">
                                 <button class="accordion-button collapsed" type="button" >
                                   Cerrar Sesion  <!-- falta hacer el sesion clear-->
                                 </button>

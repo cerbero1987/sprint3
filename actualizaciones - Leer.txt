@@ -28,3 +28,48 @@ total actualizacion:
 20-10-2021
 
 -indoestudiantes funcionando 100% con su consulta de update
+
+--- Yefferson ---
+Modulo de comentarios sobre las actividades
+
+20-10-2021 yefferson
+- se actualizaron y crearon las vistas comentariosactividad , guardarcomentario y consultaractividades
+- se creo la vista listarcomentariosEliminar
+- se actualizo comentariosactividad
+- se creo el html listarcomentariosEliminar
+- se actualizo admin/actividades/consultaractividades
+- se actualizo Crear_Comentario en forms.py
+- se cambio el footer de baseadmin
+- se actualizo el meno de baseadmin en el item mensajes
+
+--Cambios sobre la DB--
+- se creo la tabla curso_alumnos
+- se cambio a autoincremental el id de la tabla rel_mensajes_actividades_usuario
+- se agrego un campo "eliminado" a la tabla rel_mensajes_actividades_usuario si esta en 0 el mensaje se muestra si esta en 1 el mensaje no se muestra (es como si lo eliminara pero no lo borro de la DB)
+
+--Modulo Funcionando--
+* Listar las actividades y los comentarios asociados (admin - docente - alumno)
+* Crear nuevos comentarios a la actividad (admin - docente - alumno)
+
+21-10-2021
+- se crean los decoradores listarcomentariosEliminar - eliminarcomentario -editarcomentario - listarcomentariosEditar - actualizarcomentario
+- se agreo el / inicial a la miga de pan session['link']
+- template usadas admin/comentariosactividad.html - admin/actividades/consultaractividades.html - admin/listarcomentarios.html - dmin/Editarcomentarios.html
+
+23-10-2021 trabajo sobre el modulo de calificaciones
+--Cambios sobre la DB--
+*Se quito la opcion de unico a los campos id_programa y nombre del curso de la tabla curso
+*Se quito la opcion de unico a los campos id_tipo_actvidad de la tabla actividad
+* en rel_curso_actividad_usuario se creo el campo calificaciones
+* se quito calificaciones de la tabla actividad
+
+--template--
+* se creo sindatos para mostrar cuando no existen datos en la DB
+* al menu de baseadmin se le agreo / inicial a todos los href que no se construyen con jinja
+* en el menu de baseadmin el root solo puede listar las calificaciones
+--- End Yefferson ---
+
+
+      
+
+      

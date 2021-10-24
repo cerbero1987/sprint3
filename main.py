@@ -253,6 +253,160 @@ def actualizarcomentario():
         flash("¡Ups! Ha ocurrido un error, intentelo de nuevo.")
         return render_template("admin/comentariosactividad.html", titulo="Comentario Actividad")
 
+#MODULO CALIFICACIONES
+#calificaciones publicadas docente
+@app.route('/calificacionespublicadas', methods=['GET', 'POST'])
+def calificacionespublicadas():
+    session.pop('nameprog', None)
+    session.pop('actividad', None)
+    session.pop('cursofull', None)
+    session.pop('actividadSeleccionada', None)
+    session['gps']="Calificaciones publicadas" #breadcrumb
+    db = get_db()
+    programasfull =  db.execute('SELECT id_programa, nombre_programa FROM programas').fetchall()
+    if programasfull is None or len(programasfull)==0:
+        error = "No existen programas academicos en la Base de Datos"
+        flash(error)
+        return redirect(url_for('sindatos'))
+    else:
+        session['programasfull'] = programasfull
+    return render_template("admin/calificacionespublicadas.html", titulo="Ver Calificaciones")
+
+@app.route('/calificacionespublicadas/<int:programa>', methods=['GET', 'POST'])
+def calificacionespublicadasPrograma(programa):
+    if programa != 0:
+        db = get_db()
+        cursofull =  db.execute('SELECT id_cursos, nombre_curso FROM cursos WHERE id_programa = ?',(programa,)).fetchall()
+        if cursofull is None or len(cursofull)==0:
+            session.pop('namecurso', None)
+            session.pop('cursofull', None)
+            session.pop('actividad', None)
+            error = "No existen Cursos asociados al programa academico seleccionado"
+            flash(error)
+            return redirect(url_for('calificacionespublicadas'))
+        else:
+            nameprog =  db.execute('SELECT id_programa,nombre_programa FROM programas WHERE id_programa = ?',(programa,)).fetchone()
+            session.pop('namecurso', None)
+            session.pop('cursofull', None)
+            session.pop('actividad', None)
+            session.pop('actividadSeleccionada', None)
+            session['cursofull'] = cursofull
+            session['nameprog'] = nameprog[1]
+            session['id_programa'] = nameprog[0]
+    return render_template("admin/calificacionespublicadas.html", titulo="Ver Calificaciones")
+
+@app.route('/calificacionespublicadas/<int:programa>/<int:curso>', methods=['GET', 'POST'])
+def calificacionespublicadascurso(programa,curso):
+    
+    if programa != 0 and curso !=0: 
+        db = get_db()
+        actividad =  db.execute('SELECT DISTINCT actividades.id_actividad, actividades.descripcion FROM rel_curso_actividad_usuario INNER JOIN actividades ON actividades.id_actividad = rel_curso_actividad_usuario.id_actividad WHERE rel_curso_actividad_usuario.id_curso=?',(curso,)).fetchall()
+        
+        if actividad is None or len(actividad)==0:
+            session.pop('desc', None)
+            session.pop('namecurso', None)
+            session.pop('actividad', None)
+            session.pop('actividadSeleccionada', None)
+            error = "No existen Actividades asociadas al Curso seleccionado"
+            flash(error)
+            return render_template("admin/calificacionespublicadas.html", programa = programa, titulo="Ver Calificaciones")
+        else:
+            nameprog =  db.execute('SELECT nombre_programa FROM programas WHERE id_programa = ?',(programa,)).fetchone()
+            namecurso =  db.execute('SELECT nombre_curso FROM cursos WHERE id_cursos = ?',(curso,)).fetchone()
+            if namecurso is None or len(namecurso)==0:
+                session['namecurso'] = "seleccione el programa"
+
+            else:
+                session['namecurso'] = namecurso
+                session['desc'] = "seleccione la actividad"
+            
+            session['actividad'] = actividad
+            session['nameprog'] = nameprog[0]
+            session['id_curso'] = curso
+            
+    return render_template("admin/calificacionespublicadas.html", programa = programa, titulo="Ver Calificaciones")
+
+@app.route('/calificacionespublicadas/<int:programa>/<int:curso>/<int:actividad>', methods=['GET', 'POST'])
+def calificacionespublicadascursoactividad(programa,curso,actividad):
+    
+    if programa != 0 and curso !=0 and actividad != 0: 
+        db = get_db()
+        actividadSeleccionada =  db.execute('SELECT rel_curso_actividad_usuario.id_actividad, actividades.descripcion, rel_curso_actividad_usuario.calificacion, usuario.nombre_usuario, usuario.Apellido_usuario FROM rel_curso_actividad_usuario INNER JOIN actividades ON actividades.id_actividad = rel_curso_actividad_usuario.id_actividad INNER JOIN usuario ON usuario.id_usuario = rel_curso_actividad_usuario.id_usuario INNER JOIN rol ON usuario.id_rol = rol.id_rol WHERE rel_curso_actividad_usuario.id_actividad = ? AND rol.id_rol = 3',(actividad,)).fetchall()
+        
+        if actividadSeleccionada is None or len(actividadSeleccionada)==0:
+            session.pop('desc', None)
+            session.pop('namecurso', None)
+            session.pop('actividad', None)
+            session.pop('actividadSeleccionada', None)
+            error = "No existen Actividades asociadas al Curso seleccionado"
+            flash(error)
+            return render_template("admin/calificacionespublicadas.html", programa = programa, titulo="Ver Calificaciones")
+        else:
+            nameprog =  db.execute('SELECT nombre_programa FROM programas WHERE id_programa = ?',(programa,)).fetchone()
+            namecurso =  db.execute('SELECT nombre_curso FROM cursos WHERE id_cursos = ?',(curso,)).fetchone()
+            nameactividad =  db.execute('SELECT descripcion FROM actividades WHERE id_actividad = ?',(actividad,)).fetchone()
+            if namecurso is None or len(namecurso)==0:
+                session['namecurso'] = "seleccione el programa"
+                session['desc'] = "seleccione la actividad"
+                
+            else:
+                session['namecurso'] = namecurso
+
+            if nameactividad is None or len(nameactividad)==0:
+                session['desc'] = "seleccione la actividad"
+                
+            else:
+                session['desc'] = nameactividad[0]
+                
+            
+            session['actividadSeleccionada'] = actividadSeleccionada
+            session['nameprog'] = nameprog[0]
+            session['id_curso'] = curso
+            
+    return render_template("admin/calificacionespublicadas.html", programa = programa, titulo="Ver Calificaciones")
+
+#Calificaciones Alumno  solo Ver
+@app.route('/calificacionalumno', methods=['GET', 'POST'])
+def calificacionalumno():
+    session['gps']="Mis Calificaciones" #breadcrumb
+    db = get_db()
+    cursoalumno =  db.execute('SELECT DISTINCT cursos.id_cursos, cursos.nombre_curso FROM rel_curso_actividad_usuario INNER JOIN cursos ON cursos.id_cursos = rel_curso_actividad_usuario.id_curso WHERE rel_curso_actividad_usuario.id_usuario=?',(session['user_logueado'],)).fetchall()
+    if cursoalumno is None or len(cursoalumno)==0:
+        session.pop('cursoalumno', None)
+        session.pop('calificacion', None)
+        error = "El alumno no tiene matriculado ningun curso"
+        flash(error)
+        return redirect(url_for('sindatos'))
+    else:
+        session.pop('cursoalumno', None)
+        session.pop('calificacion', None)
+        session['cursoalumno'] = cursoalumno
+    return render_template("admin/calificacionalumno.html", titulo="Ver Tus Calificaciones")
+
+@app.route('/calificacionalumno/<int:curso>', methods=['GET', 'POST'])
+def calificacionalumnocurso(curso):
+    if curso != 0:
+        db = get_db()
+        calificacion =  db.execute('SELECT DISTINCT actividades.descripcion, rel_curso_actividad_usuario.calificacion FROM rel_curso_actividad_usuario INNER JOIN actividades ON actividades.id_actividad = rel_curso_actividad_usuario.id_actividad WHERE rel_curso_actividad_usuario.id_usuario = ? AND rel_curso_actividad_usuario.id_curso = ?',(session['user_logueado'], curso)).fetchall()
+        if calificacion is None or len(calificacion)==0:
+            session.pop('cursoalumno', None)
+            session.pop('calificacion', None)
+            error = "El curso no tiene notas disponibles"
+            flash(error)
+            return redirect(url_for('calificacionalumno'))
+        else:
+            namecurso =  db.execute('SELECT nombre_curso FROM cursos WHERE id_cursos = ?',(curso,)).fetchone()
+            if namecurso is None or len(namecurso)==0:
+                session['namecurso'] = "seleccione el programa"
+                
+            else:
+                session['namecurso'] = namecurso
+            session['calificacion'] = calificacion
+    return render_template("admin/calificacionalumno.html", titulo="Ver Tus Calificaciones")
+
+@app.route('/sindatos', methods=['GET', 'POST'])
+def sindatos():
+    return render_template("admin/sindatos.html", titulo='Error 404')
 
 @app.route('/gracias', methods=['GET', 'POST'])
 def gracias():
@@ -418,12 +572,7 @@ def notasestudiante():
     session['gps']="Calificaciones" #breadcrumb
     return render_template("admin/notasestudiante.html", titulo="Calificaciones de Estudiante")
 
-#calificaciones publicadas docente
-@app.route('/calificacionespublicadas', methods=['GET', 'POST'])
-def calificacionespublicadas():
-    
-    session['gps']="Calificaciones publicadas" #breadcrumb
-    return render_template("admin/calificacionespublicadas.html", titulo="Calificaciones Publicas")
+
 
 #Notas docente
 @app.route('/notasdocente', methods=['GET', 'POST'])
