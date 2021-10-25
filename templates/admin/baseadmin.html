@@ -192,9 +192,11 @@
                         <div id="flush-collapseCalificacion" class="accordion-collapse collapse" aria-labelledby="flush-headingCalificacion" data-bs-parent="#accordionFlushExample">
                           <div class="accordion-body">
                             <div class="d-grid gap-2">
-                                   
+                                  {% if session['rol_logueado'] == 1 %} 
                                   <a class="btn btn-primary" href="{{url_for(session['calificacionespublicadas'])}}" role="button">Consultar Calificaciones</a>
+                                  {%endif%}
                                   {% if session['rol_logueado'] == 2 %}
+                                  <a class="btn btn-primary" href="/calificaciondocente" role="button">Consultar Actividades</a>
                                   <a class="btn btn-primary" href="{{url_for(session['notas'])}}" role="button">Consultar y calificar actividades</a>
                                   <a class="btn btn-primary" href="#" role="button">Modificar o eliminar calificaciones</a> <!--aun cuando se acabe el tiempo de subir notas o el curso este cerrado-->
                                   {%endif%}

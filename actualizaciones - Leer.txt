@@ -67,6 +67,17 @@ Modulo de comentarios sobre las actividades
 * se creo sindatos para mostrar cuando no existen datos en la DB
 * al menu de baseadmin se le agreo / inicial a todos los href que no se construyen con jinja
 * en el menu de baseadmin el root solo puede listar las calificaciones
+* Se crearon los decoradores calificacionespublicadas - calificacionespublicadasPrograma - calificacionespublicadascurso - calificacionespublicadascursoactividad - calificacionalumno - calificacionalumnocurso 
+* Se crearon los html admin/calificacionalumno.html - admin/calificacionespublicadas.html - 
+
+24-10-2021
+
+--template--
+*Se crearon los decoradores calificaciondocente - handle_data - calificaciondocentecursoactividad- calificaciondocentecurso
+* Se creron los html admin/calificaciondocente.html - admin/guardarcalificacion.html
+* Se actualizo el modulo comentarios debido al cambio del registro calificaciones 
+
+
 --- End Yefferson ---
 
 

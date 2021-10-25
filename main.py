@@ -1,6 +1,8 @@
 import sqlite3
 from flask import Flask, flash, redirect, render_template, request, sessions, url_for, g, session
-from werkzeug.utils import html #agregada por franklin
+from flask.wrappers import Request
+from werkzeug.utils import html
+from wtforms import form #agregada por franklin
 from utils import isCedulaValid, isUsernameValid, isEmailValid, isPasswordValid, isNameValid, isUsernameValidFacil, isPasswordValidFacil
 #import yagmail as yagmail
 from forms import Crear_Comentario, Formulario_Contacto, info_Docente, Formulario_Ingresar, info_Estudiante, crear_Actividad,registrar_Estudiante, registrar_Docente
@@ -72,12 +74,12 @@ def consultaractividades():
     session['user_logueado']#id
     session['rol_logueado']#rol 1 admin - 2 docente - 3 estudiante
     if session['rol_logueado'] == 1:
-        actividades =  db.execute('SELECT * FROM actividades INNER JOIN tipo_actividad ON actividades.id_tipo_actividad = tipo_actividad.id_tipo_actividad INNER JOIN asignaturas ON actividades.id_asignatura = asignaturas.id_asignatura').fetchall()
+        actividades =  db.execute('SELECT actividades.id_actividad, actividades.descripcion, tipo_actividad.nombre_tipo_actividad, actividades.fecha_entrega, asignaturas.asignatura  FROM actividades INNER JOIN tipo_actividad ON actividades.id_tipo_actividad = tipo_actividad.id_tipo_actividad INNER JOIN asignaturas ON actividades.id_asignatura = asignaturas.id_asignatura').fetchall()
     elif session['rol_logueado'] !=1 and session['rol_logueado'] !=2: #Alumnos
-        actividades =  db.execute('SELECT * FROM curso_alumnos INNER JOIN rel_curso_actividad_usuario ON rel_curso_actividad_usuario.id_curso = curso_alumnos.id_curso INNER JOIN actividades ON actividades.id_actividad = rel_curso_actividad_usuario.id_actividad INNER JOIN tipo_actividad ON tipo_actividad.id_tipo_actividad = actividades.id_tipo_actividad INNER JOIN asignaturas ON asignaturas.id_asignatura = actividades.id_asignatura WHERE curso_alumnos.id_usuario = ?',(session['user_logueado'],)).fetchall()
+        actividades =  db.execute('SELECT DISTINCT actividades.id_actividad, actividades.descripcion, tipo_actividad.nombre_tipo_actividad, actividades.fecha_entrega, asignaturas.asignatura FROM curso_alumnos INNER JOIN rel_curso_actividad_usuario ON rel_curso_actividad_usuario.id_curso = curso_alumnos.id_curso INNER JOIN actividades ON actividades.id_actividad = rel_curso_actividad_usuario.id_actividad INNER JOIN tipo_actividad ON tipo_actividad.id_tipo_actividad = actividades.id_tipo_actividad INNER JOIN asignaturas ON asignaturas.id_asignatura = actividades.id_asignatura WHERE curso_alumnos.id_usuario = ?',(session['user_logueado'],)).fetchall()
         print(actividades) 
     else:
-        actividades =  db.execute('SELECT * FROM rel_curso_actividad_usuario INNER JOIN actividades ON rel_curso_actividad_usuario.id_actividad = actividades.id_actividad INNER JOIN tipo_actividad ON tipo_actividad.id_tipo_actividad = actividades.id_tipo_actividad INNER JOIN asignaturas ON asignaturas.id_asignatura = actividades.id_asignatura WHERE rel_curso_actividad_usuario.id_usuario = ?',(session['user_logueado'],)).fetchall()
+        actividades =  db.execute('SELECT DISTINCT actividades.id_actividad, actividades.descripcion, tipo_actividad.nombre_tipo_actividad, actividades.fecha_entrega, asignaturas.asignatura FROM rel_curso_actividad_usuario INNER JOIN actividades ON rel_curso_actividad_usuario.id_actividad = actividades.id_actividad INNER JOIN tipo_actividad ON tipo_actividad.id_tipo_actividad = actividades.id_tipo_actividad INNER JOIN asignaturas ON asignaturas.id_asignatura = actividades.id_asignatura WHERE rel_curso_actividad_usuario.id_usuario = ?',(session['user_logueado'],)).fetchall()
 
     if actividades is None:
         error = "No se han creado actividades"
@@ -119,10 +121,6 @@ def guardarcomentario():
         error = None
         if request.method == 'POST': 
             mensaje = request.form['mensaje']
-            
-            print("===", n1)
-            print("===", logueadouser)
-            print("===", mensaje)
             if error is not None:
                 # Ocurrió un error
                 return render_template("admin/comentariosactividad.html", form=form, n1=n1, titulo="Comentario Actividad")
@@ -403,6 +401,113 @@ def calificacionalumnocurso(curso):
                 session['namecurso'] = namecurso
             session['calificacion'] = calificacion
     return render_template("admin/calificacionalumno.html", titulo="Ver Tus Calificaciones")
+
+#Calificaciones Docente  Ver - Calificar y Modificar
+@app.route('/calificaciondocente', methods=['GET', 'POST'])
+def calificaciondocente():
+    session['gps']="Cursos de los cuales soy el docente" #breadcrumb
+    db = get_db()
+    cursodocente =  db.execute('SELECT DISTINCT cursos.id_cursos, cursos.nombre_curso FROM rel_curso_actividad_usuario INNER JOIN cursos ON cursos.id_cursos = rel_curso_actividad_usuario.id_curso WHERE rel_curso_actividad_usuario.id_usuario=?',(session['user_logueado'],)).fetchall()
+    if cursodocente is None or len(cursodocente)==0:
+        session.pop('cursodocente', None)
+        session.pop('calificacion', None)
+        session.pop('nameact', None)
+        session.pop('namecurso', None)
+        session.pop('actividadDB', None)
+        session.pop('cantidadactividadDB', None)
+        session.pop('actividades', None)
+        error = "El docente no tiene asignado ningun curso"
+        flash(error)
+        return redirect(url_for('sindatos'))
+    else:
+        session.pop('cursodocente', None)
+        session.pop('calificacion', None)
+        session.pop('nameact', None)
+        session.pop('namecurso', None)
+        session.pop('actividadDB', None)
+        session.pop('cantidadactividadDB', None)
+        session.pop('actividades', None)
+        session['cursodocente'] = cursodocente
+        
+    return render_template("admin/calificaciondocente.html", titulo="Ver Tus Cursos a Calificar")
+
+@app.route('/calificaciondocente/<int:curso>', methods=['GET', 'POST'])
+def calificaciondocentecurso(curso):
+    if curso != 0:
+        db = get_db()
+        actividades =  db.execute('SELECT actividades.id_actividad, actividades.descripcion FROM rel_curso_actividad_usuario INNER JOIN actividades ON actividades.id_actividad = rel_curso_actividad_usuario.id_actividad WHERE rel_curso_actividad_usuario.id_usuario = ? AND rel_curso_actividad_usuario.id_curso = ?',(session['user_logueado'], curso)).fetchall()
+        if actividades is None or len(actividades)==0:
+            session.pop('cursodocente', None)
+            session.pop('actividades', None)
+            session.pop('nameact', None)
+            session.pop('actividadDB', None)
+            session.pop('cantidadactividadDB', None)
+            error = "El curso no tiene notas disponibles"
+            flash(error)
+            return redirect(url_for('calificaciondocente'))
+        else:
+            namecurso =  db.execute('SELECT nombre_curso FROM cursos WHERE id_cursos = ?',(curso,)).fetchone()
+            if namecurso is None or len(namecurso)==0:
+                session['namecurso'] = "seleccione el programa"
+                
+            else:
+                session['namecurso'] = namecurso
+            session.pop('nameact', None)
+            session['actividades'] = actividades
+            session['curso'] = curso
+            session['descactividad'] = actividades
+            session.pop('actividadDB', None)
+            session.pop('cantidadactividadDB', None)
+    return render_template("admin/calificaciondocente.html", titulo="Ver las Calificaciones")
+
+@app.route('/calificaciondocente/<int:curso>/<int:actividad>', methods=['GET', 'POST'])
+def calificaciondocentecursoactividad(curso,actividad):
+    if actividad != 0 and curso !=0: 
+        db = get_db()
+        actividadDB =  db.execute('SELECT DISTINCT actividades.id_actividad, actividades.descripcion, rel_curso_actividad_usuario.id_usuario, usuario.nombre_usuario, usuario.Apellido_usuario, rel_curso_actividad_usuario.calificacion FROM rel_curso_actividad_usuario INNER JOIN actividades ON actividades.id_actividad = rel_curso_actividad_usuario.id_actividad INNER JOIN usuario ON usuario.id_usuario = rel_curso_actividad_usuario.id_usuario WHERE rel_curso_actividad_usuario.id_curso = ? AND actividades.id_actividad = ? AND usuario.id_rol != 2',(curso,actividad)).fetchall()
+        
+        if actividadDB is None or len(actividadDB)==0:
+            session.pop('cursodocente', None)
+            session.pop('actividades', None)
+            session.pop('nameact', None)
+            session.pop('actividadDB', None)
+            session.pop('cantidadactividadDB', None)
+            error = "No existen Actividades asociadas al Curso seleccionado"
+            flash(error)
+            return render_template("admin/calificaciondocente.html", curso = curso, titulo="Ver Calificaciones")
+        else:
+            nameact  = db.execute('SELECT descripcion FROM actividades WHERE id_actividad = ?',(actividad,)).fetchone()
+            if nameact is None or len(nameact)==0:
+                session['nameact'] = "seleccione la actividad"
+                
+            else:
+                session['nameact'] = nameact
+            session['actividadDB'] = actividadDB
+            session['cantidadactividadDB'] = len(actividadDB)
+    return render_template("admin/calificaciondocente.html", curso = curso, titulo="Ver Calificaciones")
+
+@app.route('/handle_data', methods=['POST'])
+def handle_data():
+    error = None
+    if request.method == 'POST':
+        if error is not None:
+            # Ocurrió un error
+            error = "Error al realizar la petición"
+            flash(error)
+            return render_template("admin/guardarcalificacion.html",titulo="Error al guardar la calificacion")
+        else:
+            notas = request.form.getlist('nota')
+            alumnos = request.form.getlist('alumno')
+            array_length = len(alumnos)
+            db = get_db()
+            for i in range(array_length):
+                print(alumnos[i], notas[i])
+                db.execute('UPDATE rel_curso_actividad_usuario SET calificacion = ? WHERE id_usuario = ?',(notas[i],alumnos[i]))
+                db.commit()
+            return render_template("admin/guardarcalificacion.html")
+            print("###############################", notas, alumnos)     
+    return render_template("admin/guardarcalificacion.html")          
+            
 
 @app.route('/sindatos', methods=['GET', 'POST'])
 def sindatos():
