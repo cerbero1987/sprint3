@@ -77,10 +77,13 @@ Modulo de comentarios sobre las actividades
 * Se creron los html admin/calificaciondocente.html - admin/guardarcalificacion.html
 * Se actualizo el modulo comentarios debido al cambio del registro calificaciones 
 
+26-10-2021
+* Se creo el template listarusuarios -crearusuario - editarusuario
+* se creo el decorador listarusuarios - crearusuario - editarusuario
+* se agrego a la consulta del decorador ingresar el campo eliminado 0 activo - 1 desactivado
+
+--Cambios sobre la DB--
+- se agrego un campo "eliminado" a la tabla usuario si esta en 0 el usuario se muestra si esta en 1 el usuario no se muestra (es como si lo eliminara pero no lo borro de la DB)
 
 --- End Yefferson ---
 
-
-      
-
-      

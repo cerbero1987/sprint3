@@ -508,6 +508,159 @@ def handle_data():
             print("###############################", notas, alumnos)     
     return render_template("admin/guardarcalificacion.html")          
             
+#PAnel de usuarios solo para el root
+@app.route('/listarusuarios', methods=['GET', 'POST'])#lista las actividades 
+def listarusuarios():
+    db = get_db()
+    session['user_logueado']#id
+    session['rol_logueado']#rol 1 admin - 2 docente - 3 estudiante
+    if session['rol_logueado'] == 1:
+        usuarios =  db.execute('SELECT usuario.eliminado, usuario.id_usuario, usuario.nombre_usuario, usuario.Apellido_usuario, usuario.correo, usuario.facultad, rol.nombre_rol fROM usuario INNER JOIN rol ON rol.id_rol = usuario.id_rol WHERE usuario.id_rol = 2 OR usuario.id_rol = 3 ').fetchall()
+    else:
+        usuarios = None
+    if usuarios is None:
+        error = "No eres un usuario autorizado"
+        flash(error)
+        return render_template("admin/listarusuarios.html", titulo="Listado de usuarios")
+    else:
+        session['gps'] = "usuarios"
+        #session['link'] = ""
+        session['usuarios'] = usuarios
+
+    return render_template("admin/listarusuarios.html")
+
+
+@app.route('/estadousuario/<int:user>/<int:estado>', methods=['GET', 'POST'])
+def estadousuario(user, estado):
+    error = None
+    if request.method == 'GET':
+        if error is not None:
+            # Ocurrió un error
+            error = "Error al realizar la petición"
+            flash(error)
+            return render_template("admin/listarusuarios.html",titulo="Error al guardar la calificacion")
+        else:
+            db = get_db()
+            db.execute('UPDATE usuario SET eliminado = ? WHERE id_usuario = ?',(estado,user))
+            db.commit()
+            error = "Se actualizo el estado del usuario"
+            flash(error)
+            return redirect(url_for("listarusuarios"))
+    return render_template("admin/listarusuarios.html") 
+
+@app.route('/crearusuario/', methods=['GET', 'POST'])
+def crearusuario():
+    db = get_db()
+    rol =  db.execute('SELECT * FROM rol').fetchall()
+    programas =  db.execute('SELECT * FROM programas').fetchall()
+    session['rol'] = rol
+    session['programas'] = programas
+    return render_template("admin/crearusuario.html") 
+
+@app.route('/guardarusuario', methods=['POST'])
+def guardarusuario():
+    error = None
+    if request.method == 'POST':
+        if error is not None:
+            # Ocurrió un error
+            error = "Error al realizar la petición"
+            flash(error)
+            return render_template("admin/crearusuario.html",titulo="Error al guardar el usuario")
+        else:
+            nombre = request.form.get('nombre')
+            apellido = request.form.get('apellido')
+            cedula = request.form.get('cedula')
+            correo = request.form.get('correo')
+            pregrado = request.form.get('pregrado')
+            postgrado = request.form.get('postgrado')
+            fecha = request.form.get('fecha')
+            tel = request.form.get('tel')
+            facul = request.form.get('facul')
+            programa = request.form.get('programa')
+            rol = request.form.get('rol')
+            user = nombre.replace(" ", "")
+            passw = generate_password_hash(cedula)
+            cod = cedula
+            eliminado = 0
+            db = get_db()
+            consulta= db.execute('INSERT INTO usuario (id_rol, user_usuario, password_usuario, nombre_usuario, Apellido_usuario, correo, cedula, codigo_usuario, pregrado, postgrado, telefono, fecha_nacimiento, facultad, id_programa, eliminado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',(rol, user, passw, nombre, apellido, correo, cedula, cod, pregrado, postgrado, tel, fecha, facul, programa, eliminado))
+            db.commit()
+            if consulta is None:
+                    error = "Error al crear el usuario"
+                    flash(error)
+                    return render_template("admin/crearusuario.html",titulo="Error al guardar el usuario")
+            else:
+                error = "Usuario Guardado con Exito"
+                flash(error)
+                return redirect(url_for("listarusuarios"))  
+    return render_template("admin/crearusuario.html") 
+
+@app.route('/editarusuario/<int:user>', methods=['GET', 'POST'])
+def editarusuario(user):
+    error = None
+    if request.method == 'GET':
+        if error is not None:
+            # Ocurrió un error
+            error = "Error al realizar la petición"
+            flash(error)
+            return redirect(url_for("listarusuarios")) 
+        else:
+            db = get_db()
+            session['user_logueado']#id
+            session['rol_logueado']#rol 1 admin - 2 docente - 3 estudiante
+            if session['rol_logueado'] == 1:
+                usuario =  db.execute('SELECT usuario.id_usuario, usuario.nombre_usuario, usuario.Apellido_usuario, usuario.cedula, usuario.correo, usuario.pregrado, usuario.postgrado, usuario.telefono, usuario.fecha_nacimiento, usuario.facultad, rol.nombre_rol, rol.id_rol, programas.nombre_programa, programas.id_programa FROM usuario INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN programas ON programas.id_programa = usuario.id_programa WHERE id_usuario = ? ',(user,)).fetchone()
+            else:
+                usuario = None
+            if usuario is None:
+                error = "No eres un usuario autorizado"
+                flash(error)
+                return render_template("admin/editarusuario.html", titulo="Listado de usuarios")
+            else:
+                session.pop('usuario', None)
+                session['gps'] = "usuario"
+                #session['link'] = ""
+                session['usuario'] = usuario
+                
+    return render_template("admin/editarusuario.html") 
+
+@app.route('/actualizarusuario', methods=['POST'])
+def actualizarusuario():
+    error = None
+    if request.method == 'POST':
+        if error is not None:
+            # Ocurrió un error
+            error = "Error al realizar la petición"
+            flash(error)
+            return render_template("admin/listarusuarios.html",titulo="Error al guardar el usuario")
+        else:
+            iduser = request.form.get('id')
+            nombre = request.form.get('nombre')
+            apellido = request.form.get('apellido')
+            cedula = request.form.get('cedula')
+            correo = request.form.get('correo')
+            pregrado = request.form.get('pregrado')
+            postgrado = request.form.get('postgrado')
+            fecha = request.form.get('fecha')
+            tel = request.form.get('tel')
+            facul = request.form.get('facul')
+            programa = request.form.get('programa')
+            rol = request.form.get('rol')
+            user = nombre.replace(" ", "")
+            passw = generate_password_hash(cedula)
+            cod = cedula
+            db = get_db()
+            consulta= db.execute('UPDATE usuario SET id_rol = ?, user_usuario = ?, password_usuario = ?, nombre_usuario = ?, Apellido_usuario = ?, correo = ?, cedula = ?, codigo_usuario = ?, pregrado = ?, postgrado = ?, telefono = ?, fecha_nacimiento = ?, facultad = ?, id_programa = ? WHERE id_usuario = ?',(rol, user, passw, nombre, apellido, correo, cedula, cod, pregrado, postgrado, tel, fecha, facul, programa, iduser))
+            db.commit()
+            if consulta is None:
+                    error = "Error al actualizar el usuario"
+                    flash(error)
+                    return render_template("admin/listarusuarios.html",titulo="Error al modificar el usuario")
+            else:
+                error = "Usuario Modificado con Exito"
+                flash(error)
+                return redirect(url_for("listarusuarios"))  
+    return render_template("admin/listarusuarios.html") 
 
 @app.route('/sindatos', methods=['GET', 'POST'])
 def sindatos():
@@ -718,12 +871,14 @@ def ingresar():
                 return render_template("ingresar.html", form=form, titulo="Iniciar Sesión")
             else:
                 db = get_db()
+                print("####################",usuario)
                 #user =  db.execute('SELECT * FROM usuario WHERE user_usuario = ? AND password_usuario = ?',(usuario, contrasena)).fetchone()
-                user =  db.execute('SELECT id_usuario, id_rol, user_usuario, password_usuario, nombre_usuario, apellido_usuario FROM usuario WHERE user_usuario = ?',(usuario,)).fetchone() 
-                print(user) 
+                user =  db.execute('SELECT id_usuario, id_rol, user_usuario, password_usuario, nombre_usuario, apellido_usuario FROM usuario WHERE user_usuario = ? AND eliminado = 0',(usuario,)).fetchone() 
+                print("####################",user) 
                 if user is None:
                     error = "Usuario no Existe en la Base de Datos"
                     flash(error)
+                    return render_template("ingresar.html", form=form, titulo="Iniciar Sesión")
                 else:                
                     usuario_valido = check_password_hash(user[3],contrasena)
                     if not usuario_valido:
